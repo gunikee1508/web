@@ -1,0 +1,168 @@
+Introdução à web -
+A topologia distribuída é a topologia de fato da internet, não existe um poder central, é um poder 'de todos'.
+A base da internet é o TCP/IP. TCP é um protocolo da camada de transporte, orientado a conexão e confiável.
+TCP/IP é um protocolo, que é uma aplicação software e esse software usa um padrão de projeto layers.
+A camada de cima usa a camada de baixo.
+Aplicação, trnasporte, internet, rede/fisica. A ordem seria: a camada de aplicação depende da camada de transporte, q depende da camada de internet, q depende da camada física. Mas não há dependencia ciclica, é feita de tal forma pra dividir as responsabilidades, a camada de cima usa serviços da camada de baixo para fazer as comunicações.
+
+// Conceito de Porta:
+Porta é um processo .
+ex: tem um PC 1 de IP 10.85.0.4 e um PC 2 10.85.0.5, tão na mesma rede de classe C, entao podem se comunicar. Mas no PC 1 roda os processos: skype, chrome, apache e dropbox, q são processos q usam portas para se comunicar. no PC 2 roda: github desk, chrome, node e mysql. 
+e se no pc 1 eu quiser acessar o pc 2?
+-> preciso saber o IP q vc quer se conectar, e tbm o processo, e o processo é mapeado pela porta. cada um dos processos precisam estar associados a um numero, q no caso é a porta, para q haja não apenas maquina a maquina, mas tbm processo a processo. 
+
+se eu tiver no pc1, com aplicaçao no chrome, acessar o pc 2 que está rodando uma aplicação no node na porta 8080? se fosse usar uma pagina usando o protocolo http, por padrão é usada a porta 80, mas posso ter o protocolo http sendo executado a partir de outra aplicação associado a outra porta, podendo ser, por exemplo, 8080.
+
+no pc1, pelo chrome acesso: http://10.85.0.5:8080 (identifiquei a maquina e o processo q vai atender a essa requisiçao pela porta), o node identifica e manda a resposta pro browser.
+
+/////////////
+
+PROTOCOLO HTTP:
+Protocolo HTTP roda diversos formatos em cima dele (html, css, imagens, etc).
+
+Fica na camada de aplicação, camada de mais alto nível. É um protocolo stateless, isto é, qd uma maquina manda uma requisiçao HTTP pro servidor, pro servidor ir pra maquina é como se estivessem fazendo a comunicação pela primeira vez, pq dentro do protocolo em si não existe o estado da conversação. Não tem estado. toda conexão q se abre, vc manda os dados e recebe os dados de volta, mas o protocolo em si é stateless.
+É cliente-servidor, fortemente baseado em requisiçao e resposta. Cliente manda uma requisição pro servidor baseado na URL com conjunto de parametros, faço uma requisiçao e recebo algo como resposta. A resposta pode ser algo em formato texto em JSON, pode ser um HTML, um vídeo via streaming, etc. A requisiçao é atendida pelo servidor e envia a resposta.
+Protocolo é baseada em cima do TCP/IP, e é baseado na web, ou seja, retorna conteudos pra formar uma pagina web.
+
+Como funciona o fluxo:
+1- Usuario informa a URL
+2- Browser gera a requisição
+GET / HTTP / 1.1 (no raiz, protocolo http usando a versao 1.1)
+Host: www.google.com.br
+3- Servidor web gera a resposta, http gera uma resposta, se for 200 OK é uma resposta bem sucedida.
+4- Browser exibe a página.
+
+Métodos do HTTP:
+Get - um dos mais importantes
+POST - importante tbm 
+PUT 
+DELETE
+TRACE
+OPTIONS
+CONNECT
+HEAD
+
+Requisição e resposta -
+Tem um cliente e um servidor, o cliente envia requisição pro servidor enviando a URL + conjunto de parametros e o servidor envia como respsota para o cliente HTML,CSS,JS,Imagens, vídeos, etc. 
+P montar uma pagina, esse fluxo é montado varias vezes.
+Por isso q umas das tecnicas é pegar uma aplicaçao usando 60 arquivos de Javascript, por ex, unificar/comprimir e juntar num arquivo só. 
+
+Requisição via GET-
+Você tem a URL e você tem parametros da requisição.
+Por ex, no browser:
+www.google.com.br/search?q=web+moderno&hl=pt-BR
+tenho:
+? que é o divisor entre a url e os parametros que vou passar na requisição, e tenho os parametros igual a chave (no caso, 'q' que representa uma query) e valor (web+moderno), o & diz que vai vir outro parametro, no caso, a lingua em pt-br.
+
+Então, quanto voce tem uma requisição via GET, os parametros vão no proprio corpo da URL. Se fosse requisiçao via post, os parametros iriam no corpo da requisição.
+
+Pra login e senha, ideal é requisição via POST, q não aparece os parametros na URL, mas é seguro? Ainda não, pra ser seguro usa-se requisição executando em cima de HTTPS.
+
+Requisição via POST -
+Vc tem requisição usando o verbo/método HTTP POST. E dentro do corpo da requisição, você tem os parametros que vão ser enviados para o outro lado para que a requisição seja processada.
+
+Grupos de Status HTTP -
+1XX - Informação
+2XX - Sucesso
+3XX - Redirecionamento (URL do site mudou e endereço antigo aponta pro endereço novo, por exemplo)
+4XX - Erro no cliente (erros no usuario, vc fez requisiçao invalida. o famoso 404 q é quando o endereço que não tem nenhuma pagina associada)
+5XX - Erro no servidor (BD fora do ar, ou erro de codigo no lado do servidor)
+
+/////////////////
+
+Servidor web - 
+Apache, node, tomcat, etc. O apache abre uma thread por requisição, 1000 usuarios por aplicação = 1000 threads. Node 1000 aplicações acessando = 1 thread processando.
+Quando vc tem uma aplicaçao web sendo colocada em produção, é q uma determinada maquina cliente vai precisar acessar seu site, porem seu site tem o endereço IP como uma maquina servidora. Tenho requisição a partir de um cliente indo para um servidor. Se digitar www.cod3r.com.br, antes de chegar num servidor que de fato vai servir a pagina que vai ser renderizada no browser, é necessario que uma consulta DNS seja feita. 
+
+Por ex, se eu tenho o servidor DNS 8.8.8.8 (q é o da Google), vc tem o dominio cod3r.com.br, lá voce tem a possibilidade de definir os registros DNS, ou voce quer q seja definido de outra empresa. O cliente tem que chegar no DNS para de fato resolver quem é de fato www.cod3r.com.br. Uma vez q ele resolver IP, ele vai para maquina correta, no servidor web, e a resposta é enviada pro cliente.
+
+Dentro de um servidor web, comum ter Virtual Hosting.
+Virtual Hosting - dentro de um servidor web, voce tem vários sites sendo atendidos. Num servidor web vc tem vários sites sendo atendidos. No geral, com aplicaçoes maiores, na vdd vc tem um unico servidor web/varios servidores web para atender um unico sistema, pode ser a parte de uma tecnica de balanceamento de carga, vc tem um balanceador e ele vai dividindo a carga em diversos servidores diferentes, ou voce pode ter CLUSTER, q vc tem um conjunto de PCs para atender um site maior (Q tem demanda grande).
+
+Dentro de um servidor, é comum ter estrutura de pastas:
+pasta images > pasta css > pasta js
+index
+
+O ideal é voce jogar todos arquivos estaticos tipo js, css, imagens, pra conteudos estaticos, como Redes CDNs, isto é, redes de alto desempenho q replicam imagens, javascript, etc. Seu servidor terá uma demanda bem menor, pois não precisará devolver imagem, javascript, etc. 
+
+Web Stack - 
+Temos:
+Linguagem (mais famoso php)
+Web Server(mais famoso apache), Banco de dados (mais famoso mysql)
+Sistema operacional (mais famoso Linux)
+
+Apenas um unico processo aponta para uma determinada porta.
+
+//////////
+
+Clinet Side vs Server Side -
+A aplicaçao server-side é onde toda aplicaçao, logica etc são processadas no lado do servidor. O lado do usuario serve apenas como um "terminal burro". O servidor "divide" boa parte das responsabilidades. A ideia de server-side mesmo é que você tem codigos aplicados no lado do servidor que gera conteudo dinamico, e gera o arquivo que manda pro browser. Server-side é o conteudo HTML é gerado no lado do servidor.
+
+Aplicação front-end/client-side: aplicação SPA, aplicaçao q tem uma unica pagina, uma unica pagina é renderizada, ele pega o javascript usado pra fazer a aplicaçao, e toda parte visual é gerada pelo javascript, e não mais pelo servidor.
+
+
+Atualmente, usa-se front-end + services:
+Vc tem uma aplicaçao rica que tem varios comportamentos, e o acesso ao servidor é muito mais para obter dados.
+
+Posso ter aplicaçao mista: tenho aplicaçao server-side e coloca funcionalidades client-side: ex, aplicaçao em PHP e algumas funcionalidades migradas para React, isto é, algumas telas em php e outras e em react.
+
+/////////////
+
+Conteúdo estático vs conteúdo dinamico -
+Conteudo estatico é qd, pra renderizar uma pagina, ele le um arquivo no disco e serviu a pagina para ser renderizada. Conteudo dinamico é aquele gerado a partir de um codigo.
+Tenho um servidor web e nele eu tenho organizado varias pastas e subpastas com arquivos, qd renderizar o index.html, essa pagina gravada no disco, dentro da pagina tem referencias pra css, js, html, fontes, etc, se for tudo no disco, é conteudo estático, pq sempre q renderizar, a pagina terá o msmo conteudo. Estatico pq no lado do servidor, os arquivos vieram do proprio servidor.
+
+Conteudo dinamico -
+Tenho servidor web, e nele quero gerar uma lista de clientes, então vou precisar de um codigo rodado no back-end q gera um conteudo dinamico baseado em consulta em BD, por exemplo, etc. Tudo isso vc consegue com geraçao de conteudo dinamico. 
+
+////////////
+
+HTML, CSS, JS -
+HTML é a parte estrutural da pagina, o que é titulo, menu, etc. CSS é a parte que vai definir os estilos. JS é a parte de comportamento dinamico. 
+
+//////////////
+
+DNS -
+Traduz nomes de dominio em endereços IP.
+
+/////////////
+
+HTTPS -
+Onde a comunicação é criptografada, comunicação segura. É feita atraves de um protocolo que criptografa os dados a partir de um certificado. 
+É o HTTP + TLS (ou SSL v4) ou HTTP + SSL;
+
+- Protege contra interceptação (MITM);
+
+-  Criptografa todas as informações: URL, cookies e headers;
+
+- Usa certificados digitais;
+
+Autoridades certificadoras:
+- Organizações que emitem e validam os certificados. Esses certificados podem ir pra sua maquina e vc instalar e o certificado pra habilitar a comunicação HTTPS entre o servidor e o browser. É importante que as CAs, isto é, as autoridades certificadoras tenham um controle muito rígido de suas chaves primárias. Para voce ter a segurança, tem que ter certificados instalados no lado do servidor, e também tem que ter no browser a cadeia de certificado instalada nele para reconhecer como certificado válido. O Let's Encrypt é uma CA que valida certificados de graça.
+
+///////////////
+
+Web Service -
+Permite interoperabilidade entre várias linguagens, é bem utilizado. 
+Web Service é Serviço Web, vc tem um serviço que sua aplicação provê, um serviço de negócio, por ex, lista de clientes devedores de sua empresa. É disponibilizado em cima de tecnologias da WEB. Vc trabalha com dados trafegando em formato textual. 
+
+É um serviço que roda em cima de tecnologias da web e que normalmente essa comunicação é trafegada em formato textual, seja em formato XML, JSON, etc.
+
+2 alternativas para trabalhar com Web Service:
+SOAP - Simple Object Access Protocol (versão mais antiga e mais burocratico), é o que chamamos de RPC (Remote Procedure Call)
+
+REST - Representational State Transfer (mais simples, mais leve, vamos usá-lo mais ele);
+
+Tanto no lado do REST qnt no lado do SOAP vc tem algumas arquiteturas que trabalham com webservice de forma geral. 
+
+Convenção RestFul:
+Temos um padrão de URL geralmente convencionado, um verbo HTTP junto com a URL.
+URL             Método      Descrição
+-----------------------------------------------------
+/clientes       POST        Novo Clientes
+/clientes       GET         Obtém Todos
+/clientes/36    GET         Obtém Cliente 36
+/clientes/12    PUT         Atualiza cliente 12
+/clientes/41    DELETE      Exclui cliente 41
+
+Padrão de microserviço - É voce pegar uma aplicaçao maior e quebrar em pequenos modulos. Normal ter equipes focadas em um unico serviço nesses casos. 
