@@ -151,7 +151,7 @@ Web Service é Serviço Web, vc tem um serviço que sua aplicação provê, um s
 2 alternativas para trabalhar com Web Service:
 SOAP - Simple Object Access Protocol (versão mais antiga e mais burocratico), é o que chamamos de RPC (Remote Procedure Call)
 
-REST - Representational State Transfer (mais simples, mais leve, vamos usá-lo mais ele);
+REST - Representational State Transfer (mais simples, mais leve, vamos usá-lo mais);
 
 Tanto no lado do REST qnt no lado do SOAP vc tem algumas arquiteturas que trabalham com webservice de forma geral. 
 
@@ -166,3 +166,14 @@ URL             Método      Descrição
 /clientes/41    DELETE      Exclui cliente 41
 
 Padrão de microserviço - É voce pegar uma aplicaçao maior e quebrar em pequenos modulos. Normal ter equipes focadas em um unico serviço nesses casos. 
+
+/////////////////////
+
+Computação em Nuvem -
+Tem a ideia de pagar pelo uso, vc aloca as vezes por hora de processamento, etc. É bem mais elástico de acordo com a demanda. Quando não precisdar mais usar, vc desliga as máquinas e não precisará mais pagar. Com isso, vc faz o escalonamento automático, onde vc vai aumentando/diminuindo a infraestrutura do seu sistema de acordo com sua demanda. 
+
+Temos várias nuvens caracterizada na categoria de IaaS (Infraestrutura como serviço)
+
+A amazon web service é a maior provedora de nuvem do mundo, vc consegue ter gerencia do computador. 
+
+PaaS vc já se preocupada com o código.
